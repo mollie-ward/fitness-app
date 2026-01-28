@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using FitnessApp.Application.Common.Interfaces;
 using FitnessApp.Infrastructure.Persistence;
+using FitnessApp.Infrastructure.Repositories;
 
 namespace FitnessApp.Infrastructure;
 
@@ -37,6 +38,9 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => 
             provider.GetRequiredService<ApplicationDbContext>());
+
+        // Register Repositories
+        services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 
         return services;
     }
