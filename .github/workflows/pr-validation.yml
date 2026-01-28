@@ -1,0 +1,144 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  validate-backend:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.changed_files, 'backend/') || contains(github.event.pull_request.changed_files, 'Dockerfile')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore backend/src/FitnessApp.API/FitnessApp.API.csproj
+
+      - name: Build
+        run: dotnet build backend/src/FitnessApp.API/FitnessApp.API.csproj --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test backend/tests/**/*.csproj --configuration Release --verbosity normal
+
+      - name: Build Docker image
+        run: docker build -t fitnessapp-backend:pr-${{ github.event.pull_request.number }} -f Dockerfile .
+
+  validate-frontend:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.changed_files, 'frontend/')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run linting
+        working-directory: ./frontend
+        run: npm run lint
+
+      - name: Check formatting
+        working-directory: ./frontend
+        run: npm run format:check
+
+      - name: Run tests
+        working-directory: ./frontend
+        run: npm test
+
+      - name: Build
+        working-directory: ./frontend
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:5000
+
+      - name: Build Docker image
+        working-directory: ./frontend
+        run: docker build -t fitnessapp-frontend:pr-${{ github.event.pull_request.number }} .
+
+  validate-infrastructure:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.changed_files, 'infrastructure/')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        continue-on-error: true
+
+      - name: Validate Bicep templates
+        run: |
+          echo "Validating Bicep templates..."
+          
+          # Install Azure CLI Bicep extension
+          az bicep install
+          
+          # Validate main template
+          az bicep build --file infrastructure/bicep/main.bicep
+          
+          # Validate all modules
+          for module in infrastructure/bicep/modules/*.bicep; do
+            echo "Validating $module..."
+            az bicep build --file "$module"
+          done
+          
+          echo "✅ All Bicep templates are valid"
+
+      - name: Azure Logout
+        if: always()
+        run: az logout || true
+
+  validate-docker-compose:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate docker-compose
+        run: |
+          echo "Validating docker-compose.yml..."
+          docker-compose config
+          echo "✅ docker-compose.yml is valid"
+
+  security-scan:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run security scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
