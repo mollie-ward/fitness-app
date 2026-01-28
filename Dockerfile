@@ -33,4 +33,8 @@ COPY --from=build /app/publish .
 ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl --fail http://localhost:8080/health || exit 1
+
 ENTRYPOINT ["dotnet", "FitnessApp.API.dll"]
