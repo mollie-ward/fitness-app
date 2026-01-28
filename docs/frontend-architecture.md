@@ -303,6 +303,12 @@ npm run build
 - Token refresh mechanism prevents long-lived tokens
 - Automatic logout on token expiry
 
+**Security Note:** In a production environment, consider migrating to httpOnly cookies for token storage to mitigate XSS risks. The current localStorage implementation is suitable for development and MVP but should be enhanced with:
+- Content Security Policy (CSP) headers
+- Input sanitization and validation
+- XSS protection middleware
+- Regular security audits
+
 ### API Security
 - CORS configured on backend
 - Authentication headers on all requests
