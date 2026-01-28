@@ -193,15 +193,20 @@ try
     app.MapControllers();
     app.MapHealthChecks("/health");
 
-    // Run database migrations
+    // Run database migrations (only for relational databases)
     using (var scope = app.Services.CreateScope())
     {
         var services = scope.ServiceProvider;
         try
         {
             var context = services.GetRequiredService<ApplicationDbContext>();
-            await context.Database.MigrateAsync();
-            Log.Information("Database migration completed successfully");
+            
+            // Only run migrations if using a relational database
+            if (context.Database.IsRelational())
+            {
+                await context.Database.MigrateAsync();
+                Log.Information("Database migration completed successfully");
+            }
         }
         catch (Exception ex)
         {
