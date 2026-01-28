@@ -59,7 +59,7 @@ public class TrainingGoalTests
             UserProfileId = Guid.NewGuid(),
             Description = "Run 10K",
             GoalType = GoalType.RunningDistance,
-            TargetDate = DateTime.UtcNow.AddDays(-30),
+            TargetDate = DateTime.UtcNow.AddDays(-1),
             Priority = 1
         };
 
@@ -68,6 +68,26 @@ public class TrainingGoalTests
 
         // Assert
         isValid.Should().BeFalse();
+    }
+
+    [Fact]
+    public void TrainingGoal_WithTodayTargetDate_IsValid()
+    {
+        // Arrange
+        var goal = new TrainingGoal
+        {
+            UserProfileId = Guid.NewGuid(),
+            Description = "Complete workout today",
+            GoalType = GoalType.GeneralFitness,
+            TargetDate = DateTime.UtcNow.Date,
+            Priority = 1
+        };
+
+        // Act
+        var isValid = goal.IsValid();
+
+        // Assert
+        isValid.Should().BeTrue();
     }
 
     [Fact]

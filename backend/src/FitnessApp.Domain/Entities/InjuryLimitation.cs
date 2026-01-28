@@ -39,7 +39,7 @@ public class InjuryLimitation : BaseEntity
     public string? MovementRestrictions { get; set; }
 
     /// <summary>
-    /// Gets or sets the user profile this injury belongs to
+    /// Navigation property to the parent UserProfile entity
     /// </summary>
     public UserProfile? UserProfile { get; set; }
 }

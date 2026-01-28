@@ -39,7 +39,7 @@ public class TrainingGoal : BaseEntity
     public GoalStatus Status { get; set; } = GoalStatus.Active;
 
     /// <summary>
-    /// Gets or sets the user profile this goal belongs to
+    /// Navigation property to the parent UserProfile entity
     /// </summary>
     public UserProfile? UserProfile { get; set; }
 
@@ -50,7 +50,7 @@ public class TrainingGoal : BaseEntity
     public bool IsValid()
     {
         // Target date must be in the future if specified
-        if (TargetDate.HasValue && TargetDate.Value.Date <= DateTime.UtcNow.Date)
+        if (TargetDate.HasValue && TargetDate.Value.Date < DateTime.UtcNow.Date)
             return false;
 
         // Priority must be positive

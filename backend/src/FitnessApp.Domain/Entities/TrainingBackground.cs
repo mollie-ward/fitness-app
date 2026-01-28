@@ -33,7 +33,7 @@ public class TrainingBackground : BaseEntity
     public string? TrainingHistoryDetails { get; set; }
 
     /// <summary>
-    /// Gets or sets the user profile this training background belongs to
+    /// Navigation property to the parent UserProfile entity
     /// </summary>
     public UserProfile? UserProfile { get; set; }
 }
