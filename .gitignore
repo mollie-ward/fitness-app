@@ -4,3 +4,21 @@ apm_modules/
 **/AGENTS.md
 AGENTS.md
 .apm
+
+# .NET build artifacts
+backend/**/bin/
+backend/**/obj/
+backend/**/logs/
+backend/**/*.user
+backend/**/*.suo
+backend/**/*.userosscache
+backend/**/*.sln.docstates
+
+# Test results
+backend/**/TestResults/
+backend/**/*.trx
+backend/**/*.coverage
+backend/**/*.coveragexml
+
+# Visual Studio files
+backend/**/.vs/
