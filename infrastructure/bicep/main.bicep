@@ -83,6 +83,16 @@ module containerAppEnv 'modules/container-app-environment.bicep' = {
   }
 }
 
+// Module: Frontend Static Web App
+module frontendStaticWebApp 'modules/static-web-app.bicep' = {
+  name: 'frontendStaticWebAppDeploy'
+  params: {
+    name: '${resourceNamePrefix}-frontend'
+    location: location
+    sku: environment == 'prod' ? 'Standard' : 'Free'
+  }
+}
+
 // Module: Backend Container App
 module backendContainerApp 'modules/backend-container-app.bicep' = {
   name: 'backendContainerAppDeploy'
@@ -96,18 +106,11 @@ module backendContainerApp 'modules/backend-container-app.bicep' = {
     jwtSecret: jwtSecret
     appInsightsConnectionString: appInsights.outputs.connectionString
     keyVaultName: keyVault.outputs.name
+    frontendUrl: 'https://${frontendStaticWebApp.outputs.defaultHostname}'
   }
-}
-
-// Module: Frontend Static Web App
-module frontendStaticWebApp 'modules/static-web-app.bicep' = {
-  name: 'frontendStaticWebAppDeploy'
-  params: {
-    name: '${resourceNamePrefix}-frontend'
-    location: location
-    sku: environment == 'prod' ? 'Standard' : 'Free'
-    backendApiUrl: backendContainerApp.outputs.fqdn
-  }
+  dependsOn: [
+    frontendStaticWebApp
+  ]
 }
 
 // Outputs

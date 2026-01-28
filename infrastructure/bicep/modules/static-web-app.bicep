@@ -12,9 +12,6 @@ param location string
 ])
 param sku string = 'Free'
 
-@description('Backend API URL')
-param backendApiUrl string
-
 resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
   name: name
   location: location
@@ -28,16 +25,6 @@ resource staticWebApp 'Microsoft.Web/staticSites@2023-01-01' = {
     }
     stagingEnvironmentPolicy: 'Enabled'
     allowConfigFileUpdates: true
-  }
-}
-
-// Configure backend API as linked backend
-resource apiBackend 'Microsoft.Web/staticSites/linkedBackends@2023-01-01' = {
-  parent: staticWebApp
-  name: 'backend'
-  properties: {
-    backendResourceId: backendApiUrl
-    region: location
   }
 }
 

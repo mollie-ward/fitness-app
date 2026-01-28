@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.39.26.7824",
-      "templateHash": "15678729802458557398"
+      "templateHash": "18140453249160864593"
     }
   },
   "parameters": {
@@ -573,6 +573,99 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2025-04-01",
+      "name": "frontendStaticWebAppDeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[format('{0}-frontend', variables('resourceNamePrefix'))]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "sku": "[if(equals(parameters('environment'), 'prod'), createObject('value', 'Standard'), createObject('value', 'Free'))]"
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.39.26.7824",
+              "templateHash": "10043420743231829979"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string",
+              "metadata": {
+                "description": "Static Web App name"
+              }
+            },
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "Location for the resource"
+              }
+            },
+            "sku": {
+              "type": "string",
+              "defaultValue": "Free",
+              "allowedValues": [
+                "Free",
+                "Standard"
+              ],
+              "metadata": {
+                "description": "SKU for Static Web App"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Web/staticSites",
+              "apiVersion": "2023-01-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "[parameters('sku')]",
+                "tier": "[parameters('sku')]"
+              },
+              "properties": {
+                "buildProperties": {
+                  "skipGithubActionWorkflowGeneration": true
+                },
+                "stagingEnvironmentPolicy": "Enabled",
+                "allowConfigFileUpdates": true
+              }
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Web/staticSites', parameters('name'))]"
+            },
+            "name": {
+              "type": "string",
+              "value": "[parameters('name')]"
+            },
+            "defaultHostname": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Web/staticSites', parameters('name')), '2023-01-01').defaultHostname]"
+            },
+            "apiKey": {
+              "type": "string",
+              "value": "[listSecrets(resourceId('Microsoft.Web/staticSites', parameters('name')), '2023-01-01').properties.apiKey]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2025-04-01",
       "name": "backendContainerAppDeploy",
       "properties": {
         "expressionEvaluationOptions": {
@@ -606,6 +699,9 @@
           },
           "keyVaultName": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'keyVaultDeploy'), '2025-04-01').outputs.name.value]"
+          },
+          "frontendUrl": {
+            "value": "[format('https://{0}', reference(resourceId('Microsoft.Resources/deployments', 'frontendStaticWebAppDeploy'), '2025-04-01').outputs.defaultHostname.value)]"
           }
         },
         "template": {
@@ -615,7 +711,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.39.26.7824",
-              "templateHash": "17312847205244434208"
+              "templateHash": "5204236679441481165"
             }
           },
           "parameters": {
@@ -671,6 +767,12 @@
               "type": "string",
               "metadata": {
                 "description": "Key Vault name"
+              }
+            },
+            "frontendUrl": {
+              "type": "string",
+              "metadata": {
+                "description": "Frontend URL for CORS"
               }
             }
           },
@@ -763,7 +865,7 @@
                         },
                         {
                           "name": "CorsSettings__AllowedOrigins__0",
-                          "value": "*"
+                          "value": "[parameters('frontendUrl')]"
                         }
                       ],
                       "probes": [
@@ -832,125 +934,9 @@
         "[resourceId('Microsoft.Resources/deployments', 'appInsightsDeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'containerAppEnvDeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'containerRegistryDeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', 'frontendStaticWebAppDeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'keyVaultDeploy')]",
         "[resourceId('Microsoft.Resources/deployments', 'sqlDatabaseDeploy')]"
-      ]
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2025-04-01",
-      "name": "frontendStaticWebAppDeploy",
-      "properties": {
-        "expressionEvaluationOptions": {
-          "scope": "inner"
-        },
-        "mode": "Incremental",
-        "parameters": {
-          "name": {
-            "value": "[format('{0}-frontend', variables('resourceNamePrefix'))]"
-          },
-          "location": {
-            "value": "[parameters('location')]"
-          },
-          "sku": "[if(equals(parameters('environment'), 'prod'), createObject('value', 'Standard'), createObject('value', 'Free'))]",
-          "backendApiUrl": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'backendContainerAppDeploy'), '2025-04-01').outputs.fqdn.value]"
-          }
-        },
-        "template": {
-          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "metadata": {
-            "_generator": {
-              "name": "bicep",
-              "version": "0.39.26.7824",
-              "templateHash": "9693564428819146646"
-            }
-          },
-          "parameters": {
-            "name": {
-              "type": "string",
-              "metadata": {
-                "description": "Static Web App name"
-              }
-            },
-            "location": {
-              "type": "string",
-              "metadata": {
-                "description": "Location for the resource"
-              }
-            },
-            "sku": {
-              "type": "string",
-              "defaultValue": "Free",
-              "allowedValues": [
-                "Free",
-                "Standard"
-              ],
-              "metadata": {
-                "description": "SKU for Static Web App"
-              }
-            },
-            "backendApiUrl": {
-              "type": "string",
-              "metadata": {
-                "description": "Backend API URL"
-              }
-            }
-          },
-          "resources": [
-            {
-              "type": "Microsoft.Web/staticSites",
-              "apiVersion": "2023-01-01",
-              "name": "[parameters('name')]",
-              "location": "[parameters('location')]",
-              "sku": {
-                "name": "[parameters('sku')]",
-                "tier": "[parameters('sku')]"
-              },
-              "properties": {
-                "buildProperties": {
-                  "skipGithubActionWorkflowGeneration": true
-                },
-                "stagingEnvironmentPolicy": "Enabled",
-                "allowConfigFileUpdates": true
-              }
-            },
-            {
-              "type": "Microsoft.Web/staticSites/linkedBackends",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', parameters('name'), 'backend')]",
-              "properties": {
-                "backendResourceId": "[parameters('backendApiUrl')]",
-                "region": "[parameters('location')]"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/staticSites', parameters('name'))]"
-              ]
-            }
-          ],
-          "outputs": {
-            "id": {
-              "type": "string",
-              "value": "[resourceId('Microsoft.Web/staticSites', parameters('name'))]"
-            },
-            "name": {
-              "type": "string",
-              "value": "[parameters('name')]"
-            },
-            "defaultHostname": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.Web/staticSites', parameters('name')), '2023-01-01').defaultHostname]"
-            },
-            "apiKey": {
-              "type": "string",
-              "value": "[listSecrets(resourceId('Microsoft.Web/staticSites', parameters('name')), '2023-01-01').properties.apiKey]"
-            }
-          }
-        }
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments', 'backendContainerAppDeploy')]"
       ]
     }
   ],

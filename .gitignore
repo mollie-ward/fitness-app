@@ -30,3 +30,7 @@ frontend/out/
 frontend/build/
 frontend/.env.local
 frontend/coverage/
+
+# Infrastructure parameter files (keep only examples)
+infrastructure/parameters/*.parameters.json
+!infrastructure/parameters/*.example.json

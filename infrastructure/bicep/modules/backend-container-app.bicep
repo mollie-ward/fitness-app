@@ -29,6 +29,9 @@ param appInsightsConnectionString string
 @description('Key Vault name')
 param keyVaultName string
 
+@description('Frontend URL for CORS')
+param frontendUrl string
+
 // Get reference to Container Registry
 resource containerRegistry 'Microsoft.ContainerRegistry/registries@2023-01-01-preview' existing = {
   name: containerRegistryName
@@ -120,7 +123,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
             }
             {
               name: 'CorsSettings__AllowedOrigins__0'
-              value: '*'
+              value: frontendUrl
             }
           ]
           probes: [

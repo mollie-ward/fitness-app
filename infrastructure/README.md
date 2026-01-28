@@ -43,7 +43,7 @@ infrastructure/
    - Integrated with GitHub for CI/CD
 
 4. **Azure SQL Database**
-   - PostgreSQL-compatible database
+   - Microsoft SQL Server database
    - SKU: Basic (dev), S1 (prod)
    - Automatic backups enabled
 

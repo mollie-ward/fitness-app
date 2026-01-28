@@ -36,13 +36,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        run: dotnet restore backend/FitnessApp.sln
+        run: dotnet restore backend/src/FitnessApp.API/FitnessApp.API.csproj
 
       - name: Build
-        run: dotnet build backend/FitnessApp.sln --configuration Release --no-restore
+        run: dotnet build backend/src/FitnessApp.API/FitnessApp.API.csproj --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test backend/FitnessApp.sln --configuration Release --no-build --verbosity normal --logger trx --collect:"XPlat Code Coverage"
+        run: dotnet test backend/tests/**/*.csproj --configuration Release --verbosity normal --logger trx --collect:"XPlat Code Coverage"
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -119,7 +119,7 @@ jobs:
         id: deploy
         uses: azure/container-apps-deploy-action@v1
         with:
-          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP_PROD }}
           containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
           acrName: ${{ secrets.AZURE_CONTAINER_REGISTRY }}
           imageToDeploy: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

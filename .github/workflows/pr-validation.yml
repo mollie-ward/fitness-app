@@ -21,13 +21,13 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore backend/FitnessApp.sln
+        run: dotnet restore backend/src/FitnessApp.API/FitnessApp.API.csproj
 
       - name: Build
-        run: dotnet build backend/FitnessApp.sln --configuration Release --no-restore
+        run: dotnet build backend/src/FitnessApp.API/FitnessApp.API.csproj --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test backend/FitnessApp.sln --configuration Release --no-build --verbosity normal
+        run: dotnet test backend/tests/**/*.csproj --configuration Release --verbosity normal
 
       - name: Build Docker image
         run: docker build -t fitnessapp-backend:pr-${{ github.event.pull_request.number }} -f Dockerfile .
