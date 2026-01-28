@@ -1,6 +1,7 @@
 # Task: Frontend Scaffolding
 
 **Task ID:** 002  
+**GitHub Issue:** [#3](https://github.com/mollie-ward/fitness-app/issues/3)  
 **Feature:** Infrastructure  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Large  
