@@ -87,4 +87,25 @@ public class DependencyInjectionTests
         descriptor.Should().NotBeNull();
         descriptor!.Lifetime.Should().Be(ServiceLifetime.Scoped);
     }
+
+    [Fact]
+    public void AddInfrastructure_ShouldRegisterUserProfileRepository()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["ConnectionStrings:DefaultConnection"] = "Host=localhost;Database=test;Username=test;Password=test"
+            })
+            .Build();
+
+        // Act
+        services.AddInfrastructure(configuration);
+
+        // Assert
+        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IUserProfileRepository));
+        descriptor.Should().NotBeNull();
+        descriptor!.Lifetime.Should().Be(ServiceLifetime.Scoped);
+    }
 }
