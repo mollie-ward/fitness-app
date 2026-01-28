@@ -22,3 +22,11 @@ backend/**/*.coveragexml
 
 # Visual Studio files
 backend/**/.vs/
+
+# Frontend dependencies and build artifacts
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env.local
+frontend/coverage/
