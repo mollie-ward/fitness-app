@@ -1,6 +1,7 @@
 # Task: Infrastructure & Deployment Scaffolding
 
 **Task ID:** 003  
+**GitHub Issue:** [#5](https://github.com/mollie-ward/fitness-app/issues/5)  
 **Feature:** Infrastructure  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Medium  
