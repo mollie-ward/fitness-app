@@ -1,6 +1,7 @@
 # Task: Backend Scaffolding
 
 **Task ID:** 001  
+**GitHub Issue:** [#1](https://github.com/mollie-ward/fitness-app/issues/1)  
 **Feature:** Infrastructure  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Large  
