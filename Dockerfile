@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy solution and project files
-COPY ["backend/FitnessApp.sln", "backend/"]
+COPY ["backend/FitnessApp.slnx", "backend/"]
 COPY ["backend/src/FitnessApp.API/FitnessApp.API.csproj", "backend/src/FitnessApp.API/"]
 COPY ["backend/src/FitnessApp.Application/FitnessApp.Application.csproj", "backend/src/FitnessApp.Application/"]
 COPY ["backend/src/FitnessApp.Domain/FitnessApp.Domain.csproj", "backend/src/FitnessApp.Domain/"]

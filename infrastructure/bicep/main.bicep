@@ -97,11 +97,6 @@ module backendContainerApp 'modules/backend-container-app.bicep' = {
     appInsightsConnectionString: appInsights.outputs.connectionString
     keyVaultName: keyVault.outputs.name
   }
-  dependsOn: [
-    containerRegistry
-    sqlDatabase
-    keyVault
-  ]
 }
 
 // Module: Frontend Static Web App
