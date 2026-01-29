@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using FluentValidation;
 using FitnessApp.API.Configuration;
 using FitnessApp.API.Middleware;
 using FitnessApp.Infrastructure;
@@ -38,6 +39,9 @@ try
 
     // Add Infrastructure Services
     builder.Services.AddInfrastructure(builder.Configuration);
+
+    // Add FluentValidation
+    builder.Services.AddValidatorsFromAssemblyContaining<FitnessApp.Application.Validators.UserProfileDtoValidator>();
 
     // Add Authentication
     builder.Services.AddAuthentication(options =>
