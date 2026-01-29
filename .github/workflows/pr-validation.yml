@@ -127,7 +127,8 @@ jobs:
       - name: Validate docker-compose
         run: |
           echo "Validating docker-compose.yml..."
-          docker-compose config
+          docker compose version
+          docker compose config
           echo "✅ docker-compose.yml is valid"
 
   security-scan:
