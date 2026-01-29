@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Configuration;
 using FitnessApp.Infrastructure.Persistence;
 
 namespace FitnessApp.IntegrationTests;
@@ -12,8 +13,21 @@ namespace FitnessApp.IntegrationTests;
 /// </summary>
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private static readonly string DatabaseName = $"TestDb_{Guid.NewGuid()}";
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureAppConfiguration((context, config) =>
+        {
+            // Override JWT settings for testing
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["JwtSettings:Secret"] = "ThisIsATestSecretKeyForJWTTokenGenerationPurposes123456",
+                ["JwtSettings:Issuer"] = "FitnessApp.TestServer",
+                ["JwtSettings:Audience"] = "FitnessApp.TestClient"
+            });
+        });
+
         builder.ConfigureServices(services =>
         {
             // Remove the existing DbContext registration
@@ -25,10 +39,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 services.Remove(descriptor);
             }
 
-            // Add DbContext using in-memory database for testing
+            // Add DbContext using in-memory database for testing with shared database name
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDatabase");
+                options.UseInMemoryDatabase(DatabaseName);
             });
 
             // Build the service provider
