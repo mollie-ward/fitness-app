@@ -62,4 +62,68 @@ public interface IUserProfileRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>True if deleted, false if not found</returns>
     Task<bool> DeleteAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a complete user profile with all related entities
+    /// </summary>
+    /// <param name="userId">The user ID</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The complete user profile if found, null otherwise</returns>
+    Task<UserProfile?> GetCompleteProfileAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a specific training goal by ID
+    /// </summary>
+    /// <param name="goalId">The goal ID</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The training goal if found, null otherwise</returns>
+    Task<TrainingGoal?> GetGoalByIdAsync(Guid goalId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a specific injury limitation by ID
+    /// </summary>
+    /// <param name="injuryId">The injury ID</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The injury limitation if found, null otherwise</returns>
+    Task<InjuryLimitation?> GetInjuryByIdAsync(Guid injuryId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds a training goal to a user profile
+    /// </summary>
+    /// <param name="goal">The training goal to add</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The added training goal</returns>
+    Task<TrainingGoal> AddGoalAsync(TrainingGoal goal, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates a training goal
+    /// </summary>
+    /// <param name="goal">The training goal to update</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The updated training goal</returns>
+    Task<TrainingGoal> UpdateGoalAsync(TrainingGoal goal, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a training goal
+    /// </summary>
+    /// <param name="goalId">The goal ID to delete</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>True if deleted, false if not found</returns>
+    Task<bool> DeleteGoalAsync(Guid goalId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Adds an injury limitation to a user profile
+    /// </summary>
+    /// <param name="injury">The injury limitation to add</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The added injury limitation</returns>
+    Task<InjuryLimitation> AddInjuryAsync(InjuryLimitation injury, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates an injury limitation
+    /// </summary>
+    /// <param name="injury">The injury limitation to update</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The updated injury limitation</returns>
+    Task<InjuryLimitation> UpdateInjuryAsync(InjuryLimitation injury, CancellationToken cancellationToken = default);
 }
