@@ -4,7 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FitnessApp.Infrastructure.Persistence;
+using FitnessApp.IntegrationTests.Helpers;
 
 namespace FitnessApp.IntegrationTests;
 
@@ -44,6 +47,20 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             {
                 options.UseInMemoryDatabase(DatabaseName);
             });
+
+            // Remove existing authentication services and replace with test authentication
+            services.RemoveAll<IAuthenticationSchemeProvider>();
+            services.RemoveAll<IAuthenticationService>();
+            services.RemoveAll<IAuthenticationHandlerProvider>();
+            
+            // Add test authentication scheme
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = TestAuthHandler.AuthenticationScheme;
+                options.DefaultChallengeScheme = TestAuthHandler.AuthenticationScheme;
+            })
+            .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                TestAuthHandler.AuthenticationScheme, options => { });
 
             // Build the service provider
             var sp = services.BuildServiceProvider();

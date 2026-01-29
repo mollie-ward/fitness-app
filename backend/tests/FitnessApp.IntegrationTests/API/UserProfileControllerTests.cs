@@ -23,8 +23,9 @@ public class UserProfileControllerTests : IClassFixture<CustomWebApplicationFact
     private HttpClient CreateAuthenticatedClient(Guid? userId = null)
     {
         var client = _factory.CreateClient();
-        var authToken = JwtTokenHelper.GenerateToken(userId ?? _testUserId);
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        var effectiveUserId = userId ?? _testUserId;
+        // Add test user ID header for TestAuthHandler
+        client.DefaultRequestHeaders.Add("X-Test-UserId", effectiveUserId.ToString());
         return client;
     }
 
@@ -377,7 +378,8 @@ public class UserProfileControllerTests : IClassFixture<CustomWebApplicationFact
         // Arrange
         var client = CreateAuthenticatedClient();
         var profileDto = CreateValidProfileDto();
-        await client.PostAsJsonAsync("/api/v1/users/profile", profileDto);
+        var profileResponse = await client.PostAsJsonAsync("/api/v1/users/profile", profileDto);
+        profileResponse.StatusCode.Should().Be(HttpStatusCode.Created); // Verify profile was created
 
         var injuryDto = new InjuryLimitationDto
         {
