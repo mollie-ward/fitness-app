@@ -1,6 +1,7 @@
 # Task: User Onboarding API Endpoints
 
 **Task ID:** 005  
+**GitHub Issue:** [#9](https://github.com/mollie-ward/fitness-app/issues/9)  
 **Feature:** User Onboarding & Fitness Profiling (FRD-001)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Medium  

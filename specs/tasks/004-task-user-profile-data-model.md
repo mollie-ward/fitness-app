@@ -1,6 +1,7 @@
 # Task: User Profile Data Model & Repository
 
 **Task ID:** 004  
+**GitHub Issue:** [#7](https://github.com/mollie-ward/fitness-app/issues/7)  
 **Feature:** User Onboarding & Fitness Profiling (FRD-001)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Medium  
