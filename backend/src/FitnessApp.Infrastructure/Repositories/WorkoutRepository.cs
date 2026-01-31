@@ -31,8 +31,18 @@ public class WorkoutRepository : IWorkoutRepository
     /// <inheritdoc />
     public async Task<IEnumerable<Workout>> GetWorkoutsByDateRangeAsync(Guid userId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
     {
+        // Get active plan IDs for the user first
+        var activePlanIds = await _context.TrainingPlans
+            .Where(p => p.UserId == userId)
+            .Select(p => p.Id)
+            .ToListAsync(cancellationToken);
+
+        if (!activePlanIds.Any())
+            return Enumerable.Empty<Workout>();
+
         return await _context.Workouts
-            .Where(w => w.TrainingWeek!.TrainingPlan!.UserId == userId &&
+            .Include(w => w.TrainingWeek)
+            .Where(w => activePlanIds.Contains(w.TrainingWeek!.PlanId) &&
                        w.ScheduledDate >= startDate &&
                        w.ScheduledDate <= endDate)
             .OrderBy(w => w.ScheduledDate)
@@ -67,9 +77,19 @@ public class WorkoutRepository : IWorkoutRepository
     public async Task<Workout?> GetTodaysWorkoutAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var today = DateTime.UtcNow.Date;
+
+        // Get active plan IDs for the user first
+        var activePlanIds = await _context.TrainingPlans
+            .Where(p => p.UserId == userId)
+            .Select(p => p.Id)
+            .ToListAsync(cancellationToken);
+
+        if (!activePlanIds.Any())
+            return null;
         
         return await _context.Workouts
-            .Where(w => w.TrainingWeek!.TrainingPlan!.UserId == userId &&
+            .Include(w => w.TrainingWeek)
+            .Where(w => activePlanIds.Contains(w.TrainingWeek!.PlanId) &&
                        w.ScheduledDate.Date == today)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -80,8 +100,18 @@ public class WorkoutRepository : IWorkoutRepository
         var today = DateTime.UtcNow.Date;
         var endDate = today.AddDays(days);
 
+        // Get active plan IDs for the user first
+        var activePlanIds = await _context.TrainingPlans
+            .Where(p => p.UserId == userId)
+            .Select(p => p.Id)
+            .ToListAsync(cancellationToken);
+
+        if (!activePlanIds.Any())
+            return Enumerable.Empty<Workout>();
+
         return await _context.Workouts
-            .Where(w => w.TrainingWeek!.TrainingPlan!.UserId == userId &&
+            .Include(w => w.TrainingWeek)
+            .Where(w => activePlanIds.Contains(w.TrainingWeek!.PlanId) &&
                        w.ScheduledDate.Date >= today &&
                        w.ScheduledDate.Date <= endDate)
             .OrderBy(w => w.ScheduledDate)

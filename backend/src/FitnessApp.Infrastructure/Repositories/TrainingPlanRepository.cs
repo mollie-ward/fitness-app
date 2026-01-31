@@ -64,11 +64,23 @@ public class TrainingPlanRepository : ITrainingPlanRepository
     /// <inheritdoc />
     public async Task<TrainingPlan?> GetPlanWithWeeksAsync(Guid planId, CancellationToken cancellationToken = default)
     {
-        return await _context.TrainingPlans
-            .Include(p => p.TrainingWeeks.OrderBy(w => w.WeekNumber))
-                .ThenInclude(w => w.Workouts.OrderBy(wo => wo.DayOfWeek))
+        var plan = await _context.TrainingPlans
+            .Include(p => p.TrainingWeeks)
+                .ThenInclude(w => w.Workouts)
             .Include(p => p.PlanMetadata)
             .FirstOrDefaultAsync(p => p.Id == planId, cancellationToken);
+
+        if (plan != null)
+        {
+            // Order in memory after loading
+            plan.TrainingWeeks = plan.TrainingWeeks.OrderBy(w => w.WeekNumber).ToList();
+            foreach (var week in plan.TrainingWeeks)
+            {
+                week.Workouts = week.Workouts.OrderBy(wo => wo.DayOfWeek).ToList();
+            }
+        }
+
+        return plan;
     }
 
     /// <inheritdoc />
