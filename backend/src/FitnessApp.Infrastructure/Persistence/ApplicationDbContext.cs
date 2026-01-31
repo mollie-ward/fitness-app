@@ -90,6 +90,31 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<ExerciseContraindication> ExerciseContraindications => Set<ExerciseContraindication>();
 
     /// <summary>
+    /// Training plans in the application
+    /// </summary>
+    public DbSet<TrainingPlan> TrainingPlans => Set<TrainingPlan>();
+
+    /// <summary>
+    /// Training weeks in the application
+    /// </summary>
+    public DbSet<TrainingWeek> TrainingWeeks => Set<TrainingWeek>();
+
+    /// <summary>
+    /// Workouts in the application
+    /// </summary>
+    public DbSet<Workout> Workouts => Set<Workout>();
+
+    /// <summary>
+    /// Workout exercises in the application
+    /// </summary>
+    public DbSet<WorkoutExercise> WorkoutExercises => Set<WorkoutExercise>();
+
+    /// <summary>
+    /// Plan metadata in the application
+    /// </summary>
+    public DbSet<PlanMetadata> PlanMetadatas => Set<PlanMetadata>();
+
+    /// <summary>
     /// Configures the model and relationships
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -316,6 +341,124 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
             entity.HasIndex(e => new { e.ExerciseId, e.ContraindicationId }).IsUnique();
             entity.HasIndex(e => e.ContraindicationId);
+        });
+
+        // Configure TrainingPlan entity
+        modelBuilder.Entity<TrainingPlan>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.PlanName).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.StartDate).IsRequired();
+            entity.Property(e => e.EndDate).IsRequired();
+            entity.Property(e => e.TotalWeeks).IsRequired();
+            entity.Property(e => e.TrainingDaysPerWeek).IsRequired();
+            entity.Property(e => e.Status).IsRequired();
+            entity.Property(e => e.CurrentWeek).IsRequired();
+            entity.Property(e => e.IsDeleted).IsRequired().HasDefaultValue(false);
+            
+            // Relationships
+            entity.HasOne(e => e.UserProfile)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasOne(e => e.PrimaryGoal)
+                .WithMany()
+                .HasForeignKey(e => e.PrimaryGoalId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasMany(e => e.TrainingWeeks)
+                .WithOne(tw => tw.TrainingPlan)
+                .HasForeignKey(tw => tw.PlanId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            entity.HasOne(e => e.PlanMetadata)
+                .WithOne(pm => pm.TrainingPlan)
+                .HasForeignKey<PlanMetadata>(pm => pm.PlanId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
+
+            // Indexes for efficient queries
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => new { e.UserId, e.Status });
+            entity.HasIndex(e => e.IsDeleted);
+            entity.HasQueryFilter(e => !e.IsDeleted);
+        });
+
+        // Configure TrainingWeek entity
+        modelBuilder.Entity<TrainingWeek>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.PlanId).IsRequired();
+            entity.Property(e => e.WeekNumber).IsRequired();
+            entity.Property(e => e.Phase).IsRequired();
+            entity.Property(e => e.StartDate).IsRequired();
+            entity.Property(e => e.EndDate).IsRequired();
+            entity.Property(e => e.FocusArea).HasMaxLength(500);
+
+            entity.HasMany(e => e.Workouts)
+                .WithOne(w => w.TrainingWeek)
+                .HasForeignKey(w => w.WeekId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.PlanId);
+            entity.HasIndex(e => new { e.PlanId, e.WeekNumber }).IsUnique();
+        });
+
+        // Configure Workout entity
+        modelBuilder.Entity<Workout>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.WeekId).IsRequired();
+            entity.Property(e => e.DayOfWeek).IsRequired();
+            entity.Property(e => e.ScheduledDate).IsRequired();
+            entity.Property(e => e.Discipline).IsRequired();
+            entity.Property(e => e.WorkoutName).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.Description).HasMaxLength(2000);
+            entity.Property(e => e.IntensityLevel).IsRequired();
+            entity.Property(e => e.IsKeyWorkout).IsRequired();
+            entity.Property(e => e.CompletionStatus).IsRequired();
+
+            entity.HasMany(e => e.WorkoutExercises)
+                .WithOne(we => we.Workout)
+                .HasForeignKey(we => we.WorkoutId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.WeekId);
+            entity.HasIndex(e => e.ScheduledDate);
+            entity.HasIndex(e => new { e.WeekId, e.DayOfWeek });
+        });
+
+        // Configure WorkoutExercise join entity
+        modelBuilder.Entity<WorkoutExercise>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.WorkoutId).IsRequired();
+            entity.Property(e => e.ExerciseId).IsRequired();
+            entity.Property(e => e.OrderInWorkout).IsRequired();
+            entity.Property(e => e.IntensityGuidance).HasMaxLength(200);
+            entity.Property(e => e.Notes).HasMaxLength(1000);
+
+            entity.HasOne(e => e.Exercise)
+                .WithMany()
+                .HasForeignKey(e => e.ExerciseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            entity.HasIndex(e => e.WorkoutId);
+            entity.HasIndex(e => e.ExerciseId);
+            entity.HasIndex(e => new { e.WorkoutId, e.OrderInWorkout }).IsUnique();
+        });
+
+        // Configure PlanMetadata entity
+        modelBuilder.Entity<PlanMetadata>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.PlanId).IsRequired();
+            entity.Property(e => e.AlgorithmVersion).HasMaxLength(50);
+
+            entity.HasIndex(e => e.PlanId).IsUnique();
         });
     }
 
