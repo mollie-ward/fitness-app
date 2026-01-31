@@ -34,6 +34,11 @@ public interface IApplicationDbContext
     DbSet<TrainingBackground> TrainingBackgrounds { get; }
 
     /// <summary>
+    /// Exercises in the application
+    /// </summary>
+    DbSet<Exercise> Exercises { get; }
+
+    /// <summary>
     /// Training plans in the application
     /// </summary>
     DbSet<TrainingPlan> TrainingPlans { get; }
