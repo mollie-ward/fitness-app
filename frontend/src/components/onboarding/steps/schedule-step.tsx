@@ -24,7 +24,7 @@ export function ScheduleStep() {
       <CardHeader>
         <CardTitle>When Can You Train?</CardTitle>
         <CardDescription>
-          Select the days of the week you're available for training sessions. We'll build your plan 
+          Select the days of the week you&apos;re available for training sessions. We&apos;ll build your plan 
           around your schedule. You must select at least one day.
         </CardDescription>
       </CardHeader>
@@ -91,7 +91,7 @@ export function ScheduleStep() {
               <span className="text-red-600">Please select at least 1 training day</span>
             ) : (
               <>
-                You've selected{' '}
+                You&apos;ve selected{' '}
                 <span className="text-2xl font-bold">{selectedDaysCount}</span>{' '}
                 {selectedDaysCount === 1 ? 'day' : 'days'} per week
               </>

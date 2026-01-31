@@ -4,7 +4,7 @@
 import { useEffect } from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { OnboardingFormData, FitnessLevel, GoalType, InjuryType } from '@/types/onboarding';
+import { OnboardingFormData, FitnessLevel, GoalType } from '@/types/onboarding';
 import { onboardingFormSchema } from '@/lib/validation/onboarding-schema';
 
 const STORAGE_KEY = 'onboarding_form_state';
@@ -51,7 +51,7 @@ function loadFormState(): OnboardingFormData | null {
     
     // Convert date strings back to Date objects for goals
     if (parsed.goals) {
-      parsed.goals = parsed.goals.map((goal: any) => ({
+      parsed.goals = parsed.goals.map((goal: { targetDate?: string }) => ({
         ...goal,
         targetDate: goal.targetDate ? new Date(goal.targetDate) : null,
       }));

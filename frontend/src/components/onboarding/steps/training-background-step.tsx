@@ -41,9 +41,9 @@ export function TrainingBackgroundStep() {
               {...register('trainingExperience')}
               className="mt-1"
             >
-              <option value="none">None - I'm new to structured training</option>
-              <option value="some">Some - I've followed programs before</option>
-              <option value="extensive">Extensive - I've trained consistently for years</option>
+              <option value="none">None - I&apos;m new to structured training</option>
+              <option value="some">Some - I&apos;ve followed programs before</option>
+              <option value="extensive">Extensive - I&apos;ve trained consistently for years</option>
             </Select>
             {errors.trainingExperience && (
               <p className="text-sm text-red-600 mt-1">{errors.trainingExperience.message}</p>
@@ -113,7 +113,7 @@ export function TrainingBackgroundStep() {
               <h4 className="text-sm font-semibold text-gray-700">Training Schedule</h4>
               <p className="mt-1 text-sm">
                 {Object.entries(formData.schedule)
-                  .filter(([_, selected]) => selected)
+                  .filter(([, selected]) => selected)
                   .map(([day]) => day.charAt(0).toUpperCase() + day.slice(1))
                   .join(', ')}
               </p>
@@ -136,7 +136,7 @@ export function TrainingBackgroundStep() {
               🎯 Ready to create your personalized training plan!
             </p>
             <p className="text-sm text-blue-700 mt-1">
-              Click "Complete Setup" to save your profile and generate your first workout plan.
+              Click &quot;Complete Setup&quot; to save your profile and generate your first workout plan.
             </p>
           </div>
         </div>

@@ -94,9 +94,9 @@ export function FitnessLevelStep() {
   return (
     <>
       <CardHeader>
-        <CardTitle>What's Your Current Fitness Level?</CardTitle>
+        <CardTitle>What&apos;s Your Current Fitness Level?</CardTitle>
         <CardDescription>
-          Be honest about your current abilities. This helps us create a plan that's challenging 
+          Be honest about your current abilities. This helps us create a plan that&apos;s challenging 
           but not overwhelming. You can set different levels for each discipline.
         </CardDescription>
       </CardHeader>

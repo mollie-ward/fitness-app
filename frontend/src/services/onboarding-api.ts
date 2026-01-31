@@ -3,12 +3,7 @@
  */
 import apiClient from '@/lib/api/api-client';
 import type { UserProfileDto, OnboardingFormData } from '@/types/onboarding';
-import {
-  FitnessLevel,
-  GoalStatus,
-  InjuryStatus,
-  InjuryType,
-} from '@/types/onboarding';
+import { GoalStatus, InjuryStatus } from '@/types/onboarding';
 
 /**
  * Transform onboarding form data to UserProfileDto for API submission
@@ -85,8 +80,9 @@ export async function getUserProfile(): Promise<UserProfileDto | null> {
   try {
     const response = await apiClient.get<UserProfileDto>('/users/profile');
     return response.data;
-  } catch (error: any) {
-    if (error.response?.status === 404) {
+  } catch (error: unknown) {
+    const err = error as { response?: { status?: number } };
+    if (err.response?.status === 404) {
       return null;
     }
     throw error;

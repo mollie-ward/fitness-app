@@ -2,7 +2,7 @@
  * Step 5: Injury & Limitations (Optional)
  */
 import React from 'react';
-import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
+import { useFormContext, useFieldArray } from 'react-hook-form';
 import { CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
@@ -175,7 +175,7 @@ export function InjuriesStep() {
         {!hasInjuries && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
             <p className="text-green-800 font-medium">
-              ✓ Great! We'll design your plan without restrictions.
+              ✓ Great! We&apos;ll design your plan without restrictions.
             </p>
             <p className="text-sm text-green-700 mt-1">
               You can always add injuries later from your profile settings.

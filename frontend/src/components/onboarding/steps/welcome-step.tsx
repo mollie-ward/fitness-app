@@ -26,7 +26,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
           </div>
           <CardTitle className="text-3xl mb-2">Welcome to Your Fitness Journey!</CardTitle>
           <CardDescription className="text-lg max-w-2xl">
-            Hi, I'm Coach Tom! I'll be your personal fitness coach, creating customized training 
+            Hi, I&apos;m Coach Tom! I&apos;ll be your personal fitness coach, creating customized training 
             plans tailored to your goals, schedule, and experience level.
           </CardDescription>
         </div>
@@ -39,7 +39,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
         </p>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-left">
-          <h3 className="font-semibold text-blue-900 mb-2">What we'll cover:</h3>
+          <h3 className="font-semibold text-blue-900 mb-2">What we&apos;ll cover:</h3>
           <ul className="space-y-2 text-blue-800">
             <li className="flex items-start">
               <span className="mr-2">✓</span>
@@ -69,7 +69,7 @@ export function WelcomeStep({ onNext }: WelcomeStepProps) {
           size="lg"
           className="mt-6 px-8"
         >
-          Let's Get Started! →
+          Let&apos;s Get Started! →
         </Button>
       </CardContent>
     </>

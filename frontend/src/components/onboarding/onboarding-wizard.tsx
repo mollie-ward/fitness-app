@@ -88,7 +88,9 @@ export function OnboardingWizard() {
       const formData = form.getValues();
       
       // Get user info from auth store
-      const userName = user?.name || 'User';
+      const userName = user?.firstName 
+        ? `${user.firstName} ${user.lastName || ''}`.trim() 
+        : 'User';
       const userEmail = user?.email || '';
 
       // Transform form data to DTO
@@ -102,10 +104,11 @@ export function OnboardingWizard() {
 
       // Redirect to dashboard
       router.push('/dashboard');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to create profile:', err);
+      const error = err as { response?: { data?: { message?: string } } };
       setError(
-        err.response?.data?.message || 
+        error.response?.data?.message || 
         'Failed to create profile. Please try again.'
       );
       setIsSubmitting(false);
