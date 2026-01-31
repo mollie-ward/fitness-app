@@ -468,12 +468,11 @@ public class TrainingPlanGenerationService : ITrainingPlanGenerationService
             .ToList();
 
         // Select exercises with variety
-        var random = new Random(DateTime.UtcNow.Millisecond);
         var pool = compoundExercises.Any() ? compoundExercises : availableExercises;
         
         while (selected.Count < exerciseCount && pool.Any())
         {
-            var index = random.Next(pool.Count);
+            var index = Random.Shared.Next(pool.Count);
             selected.Add(pool[index]);
             pool.RemoveAt(index);
         }

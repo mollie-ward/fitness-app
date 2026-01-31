@@ -61,6 +61,8 @@ public class ExerciseRepository : IExerciseRepository
         DifficultyLevel? difficultyLevel = null,
         CancellationToken cancellationToken = default)
     {
+        // Convert enum to strings because Contraindication.InjuryType is stored as string in DB
+        // Note: For performance optimization with large datasets, consider adding an enum column to Contraindication table
         var injuryTypeStrings = injuryTypes.Select(it => it.ToString()).ToList();
         
         // Get exercises that don't have contraindications matching the injury types
