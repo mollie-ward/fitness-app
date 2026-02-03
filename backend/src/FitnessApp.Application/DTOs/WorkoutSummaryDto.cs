@@ -15,7 +15,7 @@ public class WorkoutSummaryDto
     /// <summary>
     /// Gets or sets the workout name
     /// </summary>
-    public required string WorkoutName { get; set; }
+    public string WorkoutName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the scheduled date

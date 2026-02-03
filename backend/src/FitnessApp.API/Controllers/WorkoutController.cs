@@ -291,20 +291,18 @@ public class WorkoutController : ControllerBase
     /// </summary>
     private async Task<bool> UserOwnsWorkoutAsync(Guid userId, Guid workoutId, CancellationToken cancellationToken)
     {
-        var workout = await _workoutRepository.GetWorkoutByIdAsync(workoutId, cancellationToken);
+        // Get all plans for the user
+        var userPlans = await _planRepository.GetPlansByUserIdAsync(userId, includeDeleted: false, cancellationToken);
+        var userPlanIds = userPlans.Select(p => p.Id).ToHashSet();
+
+        // Check if the workout belongs to any of the user's plans
+        var workout = await _workoutRepository.GetWorkoutWithExercisesAsync(workoutId, cancellationToken);
         if (workout?.TrainingWeek == null)
         {
-            // Load the week if not already loaded
-            var workoutWithWeek = await _workoutRepository.GetWorkoutWithExercisesAsync(workoutId, cancellationToken);
-            if (workoutWithWeek?.TrainingWeek == null)
-            {
-                return false;
-            }
-            workout = workoutWithWeek;
+            return false;
         }
 
-        var plan = await _planRepository.GetByIdAsync(workout.TrainingWeek.PlanId, cancellationToken);
-        return plan?.UserId == userId;
+        return userPlanIds.Contains(workout.TrainingWeek.PlanId);
     }
 
     /// <summary>

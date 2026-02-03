@@ -72,6 +72,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 
             // Ensure the database is created
             db.Database.EnsureCreated();
+
+            // Seed exercise database if empty
+            Task.Run(async () =>
+            {
+                await FitnessApp.Infrastructure.Persistence.SeedData.ExerciseSeedDataExtensions
+                    .SeedExerciseDatabaseAsync(sp);
+            }).GetAwaiter().GetResult();
         });
     }
 }

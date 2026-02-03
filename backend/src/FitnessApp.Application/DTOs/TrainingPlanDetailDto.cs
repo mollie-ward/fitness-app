@@ -15,7 +15,7 @@ public class TrainingPlanDetailDto
     /// <summary>
     /// Gets or sets the plan name
     /// </summary>
-    public required string PlanName { get; set; }
+    public string PlanName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the plan start date

@@ -18,7 +18,7 @@ public class WorkoutExerciseDto
     /// <summary>
     /// Gets or sets the exercise name
     /// </summary>
-    public required string ExerciseName { get; set; }
+    public string ExerciseName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the order in workout
