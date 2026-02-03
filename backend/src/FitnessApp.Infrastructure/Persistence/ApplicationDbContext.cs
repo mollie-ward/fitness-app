@@ -115,6 +115,16 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<PlanMetadata> PlanMetadatas => Set<PlanMetadata>();
 
     /// <summary>
+    /// Completion history records in the application
+    /// </summary>
+    public DbSet<CompletionHistory> CompletionHistories => Set<CompletionHistory>();
+
+    /// <summary>
+    /// User streak information in the application
+    /// </summary>
+    public DbSet<UserStreak> UserStreaks => Set<UserStreak>();
+
+    /// <summary>
     /// Configures the model and relationships
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -459,6 +469,49 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             entity.Property(e => e.AlgorithmVersion).HasMaxLength(50);
 
             entity.HasIndex(e => e.PlanId).IsUnique();
+        });
+
+        // Configure CompletionHistory entity
+        modelBuilder.Entity<CompletionHistory>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.WorkoutId).IsRequired();
+            entity.Property(e => e.CompletedAt).IsRequired();
+            entity.Property(e => e.Notes).HasMaxLength(1000);
+
+            entity.HasOne(e => e.UserProfile)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Workout)
+                .WithMany()
+                .HasForeignKey(e => e.WorkoutId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.WorkoutId);
+            entity.HasIndex(e => new { e.UserId, e.CompletedAt });
+            entity.HasIndex(e => e.CompletedAt);
+        });
+
+        // Configure UserStreak entity
+        modelBuilder.Entity<UserStreak>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.CurrentStreak).IsRequired();
+            entity.Property(e => e.LongestStreak).IsRequired();
+            entity.Property(e => e.CurrentWeeklyStreak).IsRequired();
+            entity.Property(e => e.LongestWeeklyStreak).IsRequired();
+
+            entity.HasOne(e => e.UserProfile)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.UserId).IsUnique();
         });
     }
 

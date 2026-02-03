@@ -130,4 +130,19 @@ public class TrainingPlanRepository : ITrainingPlanRepository
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync(cancellationToken);
     }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<TrainingPlan>> GetActivePlansByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _context.TrainingPlans
+            .Where(p => p.UserId == userId && p.Status == PlanStatus.Active)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<TrainingPlan?> GetPlanWithDetailsAsync(Guid planId, CancellationToken cancellationToken = default)
+    {
+        return await GetPlanWithWeeksAsync(planId, cancellationToken);
+    }
 }

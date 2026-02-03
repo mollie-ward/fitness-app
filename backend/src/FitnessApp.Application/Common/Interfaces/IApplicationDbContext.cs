@@ -64,6 +64,16 @@ public interface IApplicationDbContext
     DbSet<PlanMetadata> PlanMetadatas { get; }
 
     /// <summary>
+    /// Completion history records in the application
+    /// </summary>
+    DbSet<CompletionHistory> CompletionHistories { get; }
+
+    /// <summary>
+    /// User streak information in the application
+    /// </summary>
+    DbSet<UserStreak> UserStreaks { get; }
+
+    /// <summary>
     /// Saves all changes made in this context to the database
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>

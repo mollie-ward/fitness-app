@@ -75,4 +75,22 @@ public interface IWorkoutRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The updated workout</returns>
     Task<Workout> UpdateWorkoutAsync(Workout workout, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates an existing workout (alias method for consistency)
+    /// </summary>
+    /// <param name="workout">The workout to update</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Task representing the async operation</returns>
+    Task UpdateAsync(Workout workout, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets workouts by date range for a training plan
+    /// </summary>
+    /// <param name="planId">The plan identifier</param>
+    /// <param name="startDate">The start date</param>
+    /// <param name="endDate">The end date</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Collection of workouts in the date range</returns>
+    Task<IEnumerable<Workout>> GetWorkoutsByPlanAndDateRangeAsync(Guid planId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default);
 }
