@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FitnessApp.Application.Common.Interfaces;
 using FitnessApp.Infrastructure.Persistence;
 using FitnessApp.Infrastructure.Repositories;
+using FitnessApp.Infrastructure.AI;
 
 namespace FitnessApp.Infrastructure;
 
@@ -46,6 +47,15 @@ public static class DependencyInjection
         services.AddScoped<IExerciseRepository, ExerciseRepository>();
         services.AddScoped<ICompletionHistoryRepository, CompletionHistoryRepository>();
         services.AddScoped<IUserStreakRepository, UserStreakRepository>();
+        services.AddScoped<IConversationRepository, ConversationRepository>();
+        services.AddScoped<IMessageRepository, MessageRepository>();
+
+        // Register Azure OpenAI Configuration
+        services.Configure<AzureOpenAISettings>(
+            configuration.GetSection(AzureOpenAISettings.SectionName));
+
+        // Register LLM Client
+        services.AddScoped<ILLMClient, AzureOpenAILLMClient>();
 
         // Register Services
         services.AddScoped<ITrainingPlanGenerationService, Application.Services.TrainingPlanGenerationService>();
