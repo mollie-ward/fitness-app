@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import { WorkoutCard } from '../workout/WorkoutCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getWorkoutForDate } from '../utils/workout-filters';
-import { getWeekDays, formatDayOfWeek, isToday, isPast, isFuture } from '../utils/calendar-helpers';
+import { formatDayOfWeek, isToday, isPast, getWeekDays } from '../utils/calendar-helpers';
 import { cn } from '@/lib/utils';
 import { CalendarOff } from 'lucide-react';
 
@@ -46,7 +46,6 @@ export const WeeklyView: React.FC<WeeklyViewProps> = ({
         const workout = getWorkoutForDate(workouts, date);
         const isTodayDate = isToday(date);
         const isPastDate = isPast(date);
-        const isFutureDate = isFuture(date);
 
         return (
           <Card

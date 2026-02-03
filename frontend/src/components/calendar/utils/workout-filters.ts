@@ -5,7 +5,7 @@
 import { Workout, WorkoutStatus } from '@/types/workout';
 import { Discipline } from '@/types/discipline';
 import { CalendarDate } from '@/types/calendar';
-import { calendarDateToISO, isoToCalendarDate, isSameDate } from './calendar-helpers';
+import { calendarDateToISO } from './calendar-helpers';
 
 /**
  * Filter workouts by date
@@ -135,15 +135,8 @@ export function calculateCompletionPercentage(workouts: Workout[]): number {
  * Check if a workout is overdue (past date and not completed)
  */
 export function isWorkoutOverdue(workout: Workout): boolean {
-  const workoutDate = isoToCalendarDate(workout.scheduledDate);
-  const today = new Date();
-  const todayDate: CalendarDate = {
-    year: today.getFullYear(),
-    month: today.getMonth() + 1,
-    day: today.getDate(),
-  };
-
   const workoutDateObj = new Date(workout.scheduledDate);
+  const today = new Date();
   const todayDateObj = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
   return (

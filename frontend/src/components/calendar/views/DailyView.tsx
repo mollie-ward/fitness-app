@@ -60,7 +60,7 @@ export const DailyView: React.FC<DailyViewProps> = ({
       {/* Today's Workout */}
       <Card className="shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl">Today's Workout</CardTitle>
+          <CardTitle className="text-2xl">Today&apos;s Workout</CardTitle>
           <p className="text-sm text-gray-500">
             {today.month}/{today.day}/{today.year}
           </p>
@@ -97,7 +97,7 @@ export const DailyView: React.FC<DailyViewProps> = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp size={20} />
-            This Week's Progress
+            This Week&apos;s Progress
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -131,7 +131,7 @@ export const DailyView: React.FC<DailyViewProps> = ({
       {tomorrowsWorkout && (
         <Card>
           <CardHeader>
-            <CardTitle>Tomorrow's Workout</CardTitle>
+            <CardTitle>Tomorrow&apos;s Workout</CardTitle>
           </CardHeader>
           <CardContent>
             <WorkoutCard

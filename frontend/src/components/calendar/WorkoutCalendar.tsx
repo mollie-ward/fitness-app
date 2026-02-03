@@ -41,7 +41,7 @@ export const WorkoutCalendar: React.FC<WorkoutCalendarProps> = ({
   } = useCalendarNavigation({ enableKeyboardNav });
 
   const dateRange = getDateRange();
-  const { workouts, isLoading, updateWorkoutStatus } = useWorkoutData({
+  const { workouts, isLoading } = useWorkoutData({
     userId,
     startDate: calendarDateToISO(dateRange.startDate),
     endDate: calendarDateToISO(dateRange.endDate),

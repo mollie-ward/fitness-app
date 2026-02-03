@@ -159,7 +159,6 @@ export function getWeekDays(weekStart: CalendarDate): CalendarDate[] {
  */
 export function getMonthDays(date: CalendarDate): CalendarDate[] {
   const monthStart = getMonthStart(date);
-  const monthEnd = getMonthEnd(date);
   const gridStart = getWeekStart(monthStart);
 
   const days: CalendarDate[] = [];
