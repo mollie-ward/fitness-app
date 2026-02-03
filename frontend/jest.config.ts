@@ -20,6 +20,7 @@ const config: Config = {
     'src/components/auth/**/*.{js,jsx,ts,tsx}',
     'src/components/ui/**/*.{js,jsx,ts,tsx}',
     'src/components/calendar/**/*.{js,jsx,ts,tsx}',
+    'src/components/progress/**/*.{js,jsx,ts,tsx}',
     '!src/lib/api/**',
     '!src/**/*.d.ts',
     '!src/**/*.stories.{js,jsx,ts,tsx}',
@@ -39,6 +40,12 @@ const config: Config = {
       statements: 85,
     },
     'src/components/calendar/**/*.{js,jsx,ts,tsx}': {
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+    'src/components/progress/**/*.{js,jsx,ts,tsx}': {
       branches: 85,
       functions: 85,
       lines: 85,
