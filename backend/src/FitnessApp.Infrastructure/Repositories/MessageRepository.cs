@@ -22,10 +22,15 @@ public class MessageRepository : IMessageRepository
         int limit = 50,
         CancellationToken cancellationToken = default)
     {
+        if (limit <= 0)
+        {
+            throw new ArgumentException("Limit must be greater than 0", nameof(limit));
+        }
+
         return await _context.Messages
             .Where(m => m.ConversationId == conversationId)
             .OrderBy(m => m.Timestamp)
-            .Take(limit > 0 ? limit : 50)
+            .Take(limit)
             .ToListAsync(cancellationToken);
     }
 
