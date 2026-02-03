@@ -10,7 +10,7 @@ export enum CalendarView {
 
 export interface CalendarDate {
   year: number;
-  month: number; // 1-12
+  month: number; // 1-12 (Note: JavaScript Date uses 0-11, we convert to 1-12 for consistency)
   day: number; // 1-31
 }
 

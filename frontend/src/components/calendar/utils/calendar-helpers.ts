@@ -6,18 +6,20 @@ import { CalendarDate } from '@/types/calendar';
 
 /**
  * Get current date as CalendarDate
+ * Note: JavaScript Date.getMonth() is 0-indexed, so we add 1 to convert to 1-12
  */
 export function getCurrentDate(): CalendarDate {
   const now = new Date();
   return {
     year: now.getFullYear(),
-    month: now.getMonth() + 1,
+    month: now.getMonth() + 1, // Convert from 0-11 to 1-12
     day: now.getDate(),
   };
 }
 
 /**
  * Convert CalendarDate to Date object
+ * Note: CalendarDate uses 1-indexed months, JavaScript Date uses 0-indexed
  */
 export function calendarDateToDate(calendarDate: CalendarDate): Date {
   return new Date(calendarDate.year, calendarDate.month - 1, calendarDate.day);
@@ -25,11 +27,12 @@ export function calendarDateToDate(calendarDate: CalendarDate): Date {
 
 /**
  * Convert Date to CalendarDate
+ * Note: Converts JavaScript's 0-indexed months to CalendarDate's 1-indexed months
  */
 export function dateToCalendarDate(date: Date): CalendarDate {
   return {
     year: date.getFullYear(),
-    month: date.getMonth() + 1,
+    month: date.getMonth() + 1, // Convert from 0-11 to 1-12
     day: date.getDate(),
   };
 }
