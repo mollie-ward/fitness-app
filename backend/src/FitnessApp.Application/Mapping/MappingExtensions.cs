@@ -196,4 +196,141 @@ public static class MappingExtensions
         profile.StrengthLevel = dto.StrengthLevel;
         profile.ScheduleAvailability = dto.ScheduleAvailability?.ToEntity();
     }
+
+    /// <summary>
+    /// Maps a TrainingPlan entity to TrainingPlanSummaryDto
+    /// </summary>
+    public static TrainingPlanSummaryDto ToSummaryDto(this TrainingPlan plan)
+    {
+        var totalWorkouts = plan.TrainingWeeks?.SelectMany(w => w.Workouts).Count() ?? 0;
+        var completedWorkouts = plan.TrainingWeeks?.SelectMany(w => w.Workouts)
+            .Count(w => w.CompletionStatus == Domain.Enums.CompletionStatus.Completed) ?? 0;
+        var progress = totalWorkouts > 0 ? (decimal)completedWorkouts / totalWorkouts * 100 : 0;
+
+        return new TrainingPlanSummaryDto
+        {
+            Id = plan.Id,
+            PlanName = plan.PlanName,
+            StartDate = plan.StartDate,
+            EndDate = plan.EndDate,
+            TotalWeeks = plan.TotalWeeks,
+            TrainingDaysPerWeek = plan.TrainingDaysPerWeek,
+            CurrentWeek = plan.CurrentWeek,
+            Status = plan.Status,
+            PrimaryGoalId = plan.PrimaryGoalId,
+            CreatedAt = plan.CreatedAt,
+            ProgressPercentage = Math.Round(progress, 2)
+        };
+    }
+
+    /// <summary>
+    /// Maps a TrainingPlan entity to TrainingPlanDetailDto
+    /// </summary>
+    public static TrainingPlanDetailDto ToDetailDto(this TrainingPlan plan)
+    {
+        var totalWorkouts = plan.TrainingWeeks?.SelectMany(w => w.Workouts).Count() ?? 0;
+        var completedWorkouts = plan.TrainingWeeks?.SelectMany(w => w.Workouts)
+            .Count(w => w.CompletionStatus == Domain.Enums.CompletionStatus.Completed) ?? 0;
+        var progress = totalWorkouts > 0 ? (decimal)completedWorkouts / totalWorkouts * 100 : 0;
+
+        return new TrainingPlanDetailDto
+        {
+            Id = plan.Id,
+            PlanName = plan.PlanName,
+            StartDate = plan.StartDate,
+            EndDate = plan.EndDate,
+            TotalWeeks = plan.TotalWeeks,
+            TrainingDaysPerWeek = plan.TrainingDaysPerWeek,
+            CurrentWeek = plan.CurrentWeek,
+            Status = plan.Status,
+            PrimaryGoalId = plan.PrimaryGoalId,
+            CreatedAt = plan.CreatedAt,
+            ProgressPercentage = Math.Round(progress, 2),
+            TrainingWeeks = plan.TrainingWeeks?.OrderBy(w => w.WeekNumber).Select(w => w.ToDto()).ToList() ?? new List<TrainingWeekDto>()
+        };
+    }
+
+    /// <summary>
+    /// Maps a TrainingWeek entity to TrainingWeekDto
+    /// </summary>
+    public static TrainingWeekDto ToDto(this TrainingWeek week)
+    {
+        return new TrainingWeekDto
+        {
+            Id = week.Id,
+            WeekNumber = week.WeekNumber,
+            Phase = week.Phase,
+            WeeklyVolume = week.WeeklyVolume,
+            IntensityLevel = week.IntensityLevel,
+            FocusArea = week.FocusArea,
+            StartDate = week.StartDate,
+            EndDate = week.EndDate,
+            Workouts = week.Workouts?.OrderBy(w => w.DayOfWeek).Select(w => w.ToSummaryDto()).ToList() ?? new List<WorkoutSummaryDto>()
+        };
+    }
+
+    /// <summary>
+    /// Maps a Workout entity to WorkoutSummaryDto
+    /// </summary>
+    public static WorkoutSummaryDto ToSummaryDto(this Workout workout)
+    {
+        return new WorkoutSummaryDto
+        {
+            Id = workout.Id,
+            WorkoutName = workout.WorkoutName,
+            ScheduledDate = workout.ScheduledDate,
+            DayOfWeek = workout.DayOfWeek,
+            Discipline = workout.Discipline,
+            SessionType = workout.SessionType,
+            EstimatedDuration = workout.EstimatedDuration,
+            IntensityLevel = workout.IntensityLevel,
+            IsKeyWorkout = workout.IsKeyWorkout,
+            CompletionStatus = workout.CompletionStatus,
+            CompletedAt = workout.CompletedAt
+        };
+    }
+
+    /// <summary>
+    /// Maps a Workout entity to WorkoutDetailDto
+    /// </summary>
+    public static WorkoutDetailDto ToDetailDto(this Workout workout)
+    {
+        return new WorkoutDetailDto
+        {
+            Id = workout.Id,
+            WorkoutName = workout.WorkoutName,
+            Description = workout.Description,
+            ScheduledDate = workout.ScheduledDate,
+            DayOfWeek = workout.DayOfWeek,
+            Discipline = workout.Discipline,
+            SessionType = workout.SessionType,
+            EstimatedDuration = workout.EstimatedDuration,
+            IntensityLevel = workout.IntensityLevel,
+            IsKeyWorkout = workout.IsKeyWorkout,
+            CompletionStatus = workout.CompletionStatus,
+            CompletedAt = workout.CompletedAt,
+            WorkoutExercises = workout.WorkoutExercises?.OrderBy(we => we.OrderInWorkout).Select(we => we.ToDto()).ToList() ?? new List<WorkoutExerciseDto>()
+        };
+    }
+
+    /// <summary>
+    /// Maps a WorkoutExercise entity to WorkoutExerciseDto
+    /// </summary>
+    public static WorkoutExerciseDto ToDto(this WorkoutExercise workoutExercise)
+    {
+        return new WorkoutExerciseDto
+        {
+            Id = workoutExercise.Id,
+            ExerciseId = workoutExercise.ExerciseId,
+            ExerciseName = workoutExercise.Exercise?.Name ?? "Unknown Exercise",
+            OrderInWorkout = workoutExercise.OrderInWorkout,
+            Sets = workoutExercise.Sets,
+            Reps = workoutExercise.Reps,
+            Duration = workoutExercise.Duration,
+            RestPeriod = workoutExercise.RestPeriod,
+            IntensityGuidance = workoutExercise.IntensityGuidance,
+            Notes = workoutExercise.Notes,
+            Description = workoutExercise.Exercise?.Description
+        };
+    }
 }
