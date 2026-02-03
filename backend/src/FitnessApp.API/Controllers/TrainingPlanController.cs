@@ -15,7 +15,7 @@ namespace FitnessApp.API.Controllers;
 [Route("api/v{version:apiVersion}/training/plans")]
 [ApiVersion("1.0")]
 [Authorize]
-public class TrainingPlanController : ControllerBase
+public class TrainingPlanController : BaseApiController
 {
     private readonly ITrainingPlanRepository _planRepository;
     private readonly ITrainingPlanGenerationService _generationService;
@@ -243,22 +243,5 @@ public class TrainingPlanController : ControllerBase
         _logger.LogInformation("Deleted plan {PlanId} for user {UserId}", planId, userId);
 
         return NoContent();
-    }
-
-    /// <summary>
-    /// Gets the current user ID from JWT claims
-    /// </summary>
-    private Guid GetCurrentUserId()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value 
-                         ?? User.FindFirst("sub")?.Value
-                         ?? User.FindFirst("userId")?.Value;
-        
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
-            throw new UnauthorizedAccessException("User ID not found in token");
-        }
-
-        return userId;
     }
 }

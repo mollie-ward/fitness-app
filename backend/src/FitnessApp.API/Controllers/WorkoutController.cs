@@ -15,7 +15,7 @@ namespace FitnessApp.API.Controllers;
 [Route("api/v{version:apiVersion}/training/workouts")]
 [ApiVersion("1.0")]
 [Authorize]
-public class WorkoutController : ControllerBase
+public class WorkoutController : BaseApiController
 {
     private readonly IWorkoutRepository _workoutRepository;
     private readonly ITrainingPlanRepository _planRepository;
@@ -303,22 +303,5 @@ public class WorkoutController : ControllerBase
         }
 
         return userPlanIds.Contains(workout.TrainingWeek.PlanId);
-    }
-
-    /// <summary>
-    /// Gets the current user ID from JWT claims
-    /// </summary>
-    private Guid GetCurrentUserId()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value 
-                         ?? User.FindFirst("sub")?.Value
-                         ?? User.FindFirst("userId")?.Value;
-        
-        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
-        {
-            throw new UnauthorizedAccessException("User ID not found in token");
-        }
-
-        return userId;
     }
 }

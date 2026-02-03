@@ -73,12 +73,12 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             // Ensure the database is created
             db.Database.EnsureCreated();
 
-            // Seed exercise database if empty
-            Task.Run(async () =>
+            // Seed exercise database if empty (synchronous to avoid deadlock)
+            if (!db.Exercises.Any())
             {
-                await FitnessApp.Infrastructure.Persistence.SeedData.ExerciseSeedDataExtensions
-                    .SeedExerciseDatabaseAsync(sp);
-            }).GetAwaiter().GetResult();
+                FitnessApp.Infrastructure.Persistence.SeedData.ExerciseSeedData.SeedAllAsync(db).GetAwaiter().GetResult();
+                db.SaveChanges();
+            }
         });
     }
 }
