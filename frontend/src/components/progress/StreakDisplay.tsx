@@ -62,8 +62,8 @@ export const StreakDisplay: React.FC<StreakDisplayProps> = ({
   } = streakInfo;
 
   const isNewRecord = currentStreak === longestStreak && currentStreak > 0;
-  const milestoneProgress = nextMilestone > 0
-    ? ((currentStreak % nextMilestone) / nextMilestone) * 100
+  const milestoneProgress = nextMilestone > 0 && daysUntilNextMilestone >= 0
+    ? ((nextMilestone - daysUntilNextMilestone) / nextMilestone) * 100
     : 0;
 
   return (

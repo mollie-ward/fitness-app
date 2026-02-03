@@ -177,9 +177,13 @@ export function useCompletionHistory(startDate?: Date, endDate?: Date) {
     setLoadingHistory,
   } = useProgressStore();
 
+  // Convert dates to strings for comparison
+  const dateKey = React.useMemo(
+    () => `${startDate?.toISOString() || 'none'}_${endDate?.toISOString() || 'none'}`,
+    [startDate, endDate]
+  );
+
   const fetchHistory = React.useCallback(async () => {
-    if (completionHistory.length > 0) return; // Use cached data if available
-    
     setLoadingHistory(true);
     try {
       const history = await getCompletionHistory(startDate, endDate);
@@ -190,7 +194,7 @@ export function useCompletionHistory(startDate?: Date, endDate?: Date) {
     } finally {
       setLoadingHistory(false);
     }
-  }, [completionHistory.length, setCompletionHistory, setLoadingHistory, startDate, endDate]);
+  }, [setCompletionHistory, setLoadingHistory, startDate, endDate]);
 
   React.useEffect(() => {
     fetchHistory();
