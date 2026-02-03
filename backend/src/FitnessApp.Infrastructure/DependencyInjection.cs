@@ -44,9 +44,12 @@ public static class DependencyInjection
         services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
         services.AddScoped<IWorkoutRepository, WorkoutRepository>();
         services.AddScoped<IExerciseRepository, ExerciseRepository>();
+        services.AddScoped<ICompletionHistoryRepository, CompletionHistoryRepository>();
+        services.AddScoped<IUserStreakRepository, UserStreakRepository>();
 
         // Register Services
         services.AddScoped<ITrainingPlanGenerationService, Application.Services.TrainingPlanGenerationService>();
+        services.AddScoped<IProgressTrackingService, Application.Services.ProgressTrackingService>();
 
         return services;
     }

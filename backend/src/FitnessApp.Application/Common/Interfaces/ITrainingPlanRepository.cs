@@ -72,4 +72,20 @@ public interface ITrainingPlanRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Collection of training plans</returns>
     Task<IEnumerable<TrainingPlan>> GetPlansByUserIdAsync(Guid userId, bool includeDeleted = false, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets all active training plans for a user
+    /// </summary>
+    /// <param name="userId">The user identifier</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Collection of active training plans</returns>
+    Task<IEnumerable<TrainingPlan>> GetActivePlansByUserIdAsync(Guid userId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets a training plan with all its details (weeks and workouts)
+    /// </summary>
+    /// <param name="planId">The plan identifier</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The training plan with full details or null if not found</returns>
+    Task<TrainingPlan?> GetPlanWithDetailsAsync(Guid planId, CancellationToken cancellationToken = default);
 }

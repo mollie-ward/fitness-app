@@ -122,6 +122,7 @@ public class WorkoutRepository : IWorkoutRepository
     public async Task<Workout?> GetWorkoutWithExercisesAsync(Guid workoutId, CancellationToken cancellationToken = default)
     {
         return await _context.Workouts
+            .Include(w => w.TrainingWeek)
             .Include(w => w.WorkoutExercises.OrderBy(we => we.OrderInWorkout))
                 .ThenInclude(we => we.Exercise)
             .FirstOrDefaultAsync(w => w.Id == workoutId, cancellationToken);
@@ -151,5 +152,23 @@ public class WorkoutRepository : IWorkoutRepository
         _context.Workouts.Update(workout);
         await _context.SaveChangesAsync(cancellationToken);
         return workout;
+    }
+
+    /// <inheritdoc />
+    public async Task UpdateAsync(Workout workout, CancellationToken cancellationToken = default)
+    {
+        await UpdateWorkoutAsync(workout, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<IEnumerable<Workout>> GetWorkoutsByPlanAndDateRangeAsync(Guid planId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
+    {
+        return await _context.Workouts
+            .Include(w => w.TrainingWeek)
+            .Where(w => w.TrainingWeek!.PlanId == planId &&
+                       w.ScheduledDate >= startDate &&
+                       w.ScheduledDate <= endDate)
+            .OrderBy(w => w.ScheduledDate)
+            .ToListAsync(cancellationToken);
     }
 }
