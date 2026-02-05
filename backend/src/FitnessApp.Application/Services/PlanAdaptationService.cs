@@ -198,6 +198,8 @@ public class PlanAdaptationService : IPlanAdaptationService
 
         foreach (var workout in futureWorkouts)
         {
+            bool workoutModified = false;
+            
             if (adjustment.Direction == IntensityDirection.Harder)
             {
                 // Increase intensity if not already at maximum
@@ -212,6 +214,7 @@ public class PlanAdaptationService : IPlanAdaptationService
                     
                     changes.Add($"Increased {workout.WorkoutName} from {oldIntensity} to {workout.IntensityLevel}");
                     workoutsModified++;
+                    workoutModified = true;
                 }
             }
             else // Easier
@@ -228,11 +231,12 @@ public class PlanAdaptationService : IPlanAdaptationService
                     
                     changes.Add($"Decreased {workout.WorkoutName} from {oldIntensity} to {workout.IntensityLevel}");
                     workoutsModified++;
+                    workoutModified = true;
                 }
             }
 
-            // Update workout if modified
-            if (workoutsModified > 0)
+            // Update workout if this specific workout was modified
+            if (workoutModified)
             {
                 await _workoutRepository.UpdateAsync(workout, cancellationToken);
             }
@@ -683,7 +687,9 @@ public class PlanAdaptationService : IPlanAdaptationService
     private DateTime FindNextAvailableDay(DateTime startDate, List<int> availableDayIndices, ref int currentIndex)
     {
         var date = startDate;
-        while (true)
+        
+        // Safety check - don't go more than 14 days out
+        while ((date - startDate).TotalDays <= 14)
         {
             int dayOfWeek = (int)date.DayOfWeek;
             if (availableDayIndices.Contains(dayOfWeek))
@@ -692,13 +698,9 @@ public class PlanAdaptationService : IPlanAdaptationService
                 return date;
             }
             date = date.AddDays(1);
-            
-            // Safety check - don't go more than 14 days out
-            if ((date - startDate).TotalDays > 14)
-            {
-                break;
-            }
         }
+        
+        // Return the last date if no available day found within 14 days
         return date;
     }
 
