@@ -246,7 +246,7 @@ public class InjuryManagementServiceTests
     }
 
     [Fact]
-    public async Task UpdateInjuryStatusAsync_ToResolved_ShouldNotTriggerAdaptation()
+    public async Task UpdateInjuryStatusAsync_WithNoStatusChange_ShouldNotTriggerAdaptation()
     {
         // Arrange
         var userId = Guid.NewGuid();
