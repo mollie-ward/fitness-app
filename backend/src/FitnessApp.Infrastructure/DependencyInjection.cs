@@ -61,6 +61,7 @@ public static class DependencyInjection
         // Register Services
         services.AddScoped<ITrainingPlanGenerationService, Application.Services.TrainingPlanGenerationService>();
         services.AddScoped<IProgressTrackingService, Application.Services.ProgressTrackingService>();
+        services.AddScoped<IPlanAdaptationService, Application.Services.PlanAdaptationService>();
 
         return services;
     }
