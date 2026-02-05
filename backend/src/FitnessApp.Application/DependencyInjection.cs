@@ -17,6 +17,7 @@ public static class DependencyInjection
         // Register Services
         services.AddScoped<ITrainingPlanGenerationService, TrainingPlanGenerationService>();
         services.AddScoped<IProgressTrackingService, ProgressTrackingService>();
+        services.AddScoped<IAICoachService, AICoachService>();
 
         return services;
     }

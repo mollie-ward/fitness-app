@@ -125,6 +125,16 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<UserStreak> UserStreaks => Set<UserStreak>();
 
     /// <summary>
+    /// Conversations in the application
+    /// </summary>
+    public DbSet<Conversation> Conversations => Set<Conversation>();
+
+    /// <summary>
+    /// Messages in the application
+    /// </summary>
+    public DbSet<Message> Messages => Set<Message>();
+
+    /// <summary>
     /// Configures the model and relationships
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -512,6 +522,37 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasIndex(e => e.UserId).IsUnique();
+        });
+
+        // Configure Conversation entity
+        modelBuilder.Entity<Conversation>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
+            entity.Property(e => e.ConversationContext).HasMaxLength(2000);
+
+            entity.HasMany(e => e.Messages)
+                .WithOne(m => m.Conversation)
+                .HasForeignKey(m => m.ConversationId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => new { e.UserId, e.IsActive });
+        });
+
+        // Configure Message entity
+        modelBuilder.Entity<Message>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.ConversationId).IsRequired();
+            entity.Property(e => e.Role).IsRequired();
+            entity.Property(e => e.Content).IsRequired();
+            entity.Property(e => e.Timestamp).IsRequired();
+            entity.Property(e => e.TriggeredAction).HasMaxLength(200);
+
+            entity.HasIndex(e => e.ConversationId);
+            entity.HasIndex(e => new { e.ConversationId, e.Timestamp });
         });
     }
 
