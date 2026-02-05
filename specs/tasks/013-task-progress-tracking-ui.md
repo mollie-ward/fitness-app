@@ -1,6 +1,7 @@
 # Task: Progress Tracking UI Components
 
 **Task ID:** 013  
+**GitHub Issue:** [#25](https://github.com/mollie-ward/fitness-app/issues/25)  
 **Feature:** Progress Tracking & Completion (FRD-005)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Large  

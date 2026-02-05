@@ -1,6 +1,7 @@
 # Task: Exercise Database Schema & Seed Data
 
 **Task ID:** 007  
+**GitHub Issue:** [#13](https://github.com/mollie-ward/fitness-app/issues/13)  
 **Feature:** AI Training Plan Generation (FRD-002)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Large  

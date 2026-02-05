@@ -1,6 +1,7 @@
 # Task: Workout Calendar UI Component
 
 **Task ID:** 011  
+**GitHub Issue:** [#21](https://github.com/mollie-ward/fitness-app/issues/21)  
 **Feature:** Workout Calendar & Scheduling (FRD-004)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Large  

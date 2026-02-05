@@ -1,6 +1,7 @@
 # Task: Training Plan Generation Service
 
 **Task ID:** 009  
+**GitHub Issue:** [#17](https://github.com/mollie-ward/fitness-app/issues/17)  
 **Feature:** AI Training Plan Generation (FRD-002)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Extra Large  

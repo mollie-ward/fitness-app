@@ -1,6 +1,7 @@
 # Task: Conversational AI Coach Backend Integration
 
 **Task ID:** 014  
+**GitHub Issue:** [#27](https://github.com/mollie-ward/fitness-app/issues/27)  
 **Feature:** Conversational AI Coach (FRD-003)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Extra Large  

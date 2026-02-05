@@ -1,6 +1,7 @@
 # Task: Progress Tracking Backend Service
 
 **Task ID:** 012  
+**GitHub Issue:** [#23](https://github.com/mollie-ward/fitness-app/issues/23)  
 **Feature:** Progress Tracking & Completion (FRD-005)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Medium  

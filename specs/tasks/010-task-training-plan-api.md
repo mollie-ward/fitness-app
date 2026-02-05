@@ -1,6 +1,7 @@
 # Task: Training Plan API Endpoints
 
 **Task ID:** 010  
+**GitHub Issue:** [#19](https://github.com/mollie-ward/fitness-app/issues/19)  
 **Feature:** AI Training Plan Generation (FRD-002)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Medium  

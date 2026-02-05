@@ -1,6 +1,7 @@
 # Task: User Onboarding UI Flow
 
 **Task ID:** 006  
+**GitHub Issue:** [#11](https://github.com/mollie-ward/fitness-app/issues/11)  
 **Feature:** User Onboarding & Fitness Profiling (FRD-001)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Large  

@@ -1,6 +1,7 @@
 # Task: Training Plan Data Model & Storage
 
 **Task ID:** 008  
+**GitHub Issue:** [#15](https://github.com/mollie-ward/fitness-app/issues/15)  
 **Feature:** AI Training Plan Generation (FRD-002)  
 **Priority:** P0 (Critical)  
 **Estimated Effort:** Large  
