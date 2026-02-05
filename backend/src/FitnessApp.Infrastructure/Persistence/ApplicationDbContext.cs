@@ -135,6 +135,11 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Message> Messages => Set<Message>();
 
     /// <summary>
+    /// Plan adaptations in the application
+    /// </summary>
+    public DbSet<PlanAdaptation> PlanAdaptations => Set<PlanAdaptation>();
+
+    /// <summary>
     /// Configures the model and relationships
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -553,6 +558,26 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
             entity.HasIndex(e => e.ConversationId);
             entity.HasIndex(e => new { e.ConversationId, e.Timestamp });
+        });
+
+        // Configure PlanAdaptation entity
+        modelBuilder.Entity<PlanAdaptation>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.PlanId).IsRequired();
+            entity.Property(e => e.Trigger).IsRequired();
+            entity.Property(e => e.Type).IsRequired();
+            entity.Property(e => e.Description).IsRequired().HasMaxLength(1000);
+            entity.Property(e => e.ChangesApplied);
+            entity.Property(e => e.AppliedAt).IsRequired();
+
+            entity.HasOne(e => e.TrainingPlan)
+                .WithMany()
+                .HasForeignKey(e => e.PlanId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.PlanId);
+            entity.HasIndex(e => new { e.PlanId, e.AppliedAt });
         });
     }
 
