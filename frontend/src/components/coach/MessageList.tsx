@@ -4,6 +4,7 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
+// eslint-disable-next-line react-hooks/incompatible-library
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ChatMessage } from './ChatMessage';
 import { TypingIndicator } from './TypingIndicator';

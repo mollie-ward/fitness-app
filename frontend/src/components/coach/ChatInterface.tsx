@@ -4,6 +4,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
 import { QuickActions } from './QuickActions';
@@ -91,10 +92,10 @@ export function ChatInterface({ initialConversationId }: ChatInterfaceProps) {
         };
 
         setMessages((prev) => [...prev, assistantMessage]);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Error sending message:', err);
         setError(
-          err.response?.data?.message ||
+          (err as {response?: {data?: {message?: string}}})?.response?.data?.message ||
             'Failed to send message. Please try again.'
         );
         // Remove the temporary user message on error
@@ -135,10 +136,12 @@ export function ChatInterface({ initialConversationId }: ChatInterfaceProps) {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
         <div className="flex items-center gap-3">
-          <img
+          <Image
             src="/coach-tom.png"
             alt="Coach Tom"
-            className="w-12 h-12 rounded-full"
+            width={48}
+            height={48}
+            className="rounded-full"
           />
           <div>
             <h2 className="text-lg font-semibold text-gray-900">Coach Tom</h2>
