@@ -1,6 +1,7 @@
 using Xunit;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using FitnessApp.Application.Common.Models;
 using FitnessApp.API.Configuration;
 
 namespace FitnessApp.UnitTests.Configuration;
@@ -44,7 +45,7 @@ public class ConfigurationTests
         };
 
         // Assert
-        jwtSettings.ExpirationInMinutes.Should().Be(60);
+        jwtSettings.ExpirationInMinutes.Should().Be(30);
     }
 
     [Fact]

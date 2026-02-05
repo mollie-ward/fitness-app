@@ -99,6 +99,21 @@ public interface IApplicationDbContext
     DbSet<PlanAdaptation> PlanAdaptations { get; }
 
     /// <summary>
+    /// Refresh tokens in the application
+    /// </summary>
+    DbSet<RefreshToken> RefreshTokens { get; }
+
+    /// <summary>
+    /// Email verification tokens in the application
+    /// </summary>
+    DbSet<EmailVerificationToken> EmailVerificationTokens { get; }
+
+    /// <summary>
+    /// Password reset tokens in the application
+    /// </summary>
+    DbSet<PasswordResetToken> PasswordResetTokens { get; }
+
+    /// <summary>
     /// Saves all changes made in this context to the database
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
