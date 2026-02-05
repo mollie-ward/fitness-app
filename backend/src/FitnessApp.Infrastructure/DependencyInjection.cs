@@ -49,6 +49,7 @@ public static class DependencyInjection
         services.AddScoped<IUserStreakRepository, UserStreakRepository>();
         services.AddScoped<IConversationRepository, ConversationRepository>();
         services.AddScoped<IMessageRepository, MessageRepository>();
+        services.AddScoped<IPlanAdaptationRepository, PlanAdaptationRepository>();
 
         // Register Azure OpenAI Configuration
         services.Configure<AzureOpenAISettings>(
@@ -60,6 +61,7 @@ public static class DependencyInjection
         // Register Services
         services.AddScoped<ITrainingPlanGenerationService, Application.Services.TrainingPlanGenerationService>();
         services.AddScoped<IProgressTrackingService, Application.Services.ProgressTrackingService>();
+        services.AddScoped<IPlanAdaptationService, Application.Services.PlanAdaptationService>();
 
         return services;
     }

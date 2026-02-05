@@ -74,6 +74,11 @@ public interface IApplicationDbContext
     DbSet<UserStreak> UserStreaks { get; }
 
     /// <summary>
+    /// Plan adaptations in the application
+    /// </summary>
+    DbSet<PlanAdaptation> PlanAdaptations { get; }
+
+    /// <summary>
     /// Saves all changes made in this context to the database
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
