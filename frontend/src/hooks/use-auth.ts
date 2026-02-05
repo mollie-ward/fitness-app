@@ -10,15 +10,22 @@ interface LoginCredentials {
   password: string;
 }
 
+interface RegisterCredentials {
+  email: string;
+  password: string;
+  name: string;
+}
+
 interface LoginResponse {
   user: {
     id: string;
     email: string;
-    firstName?: string;
-    lastName?: string;
+    name: string;
+    emailVerified: boolean;
   };
   accessToken: string;
   refreshToken: string;
+  expiresIn: number;
 }
 
 export function useAuth() {
@@ -33,7 +40,7 @@ export function useAuth() {
         
         setAuth(user, accessToken, refreshToken);
         router.push('/dashboard');
-      } catch (error) {
+      } catch (error: unknown) {
         console.error('Login failed:', error);
         throw error;
       }
@@ -43,7 +50,10 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await apiClient.post('/auth/logout');
+      const { refreshToken } = useAuthStore.getState();
+      if (refreshToken) {
+        await apiClient.post('/auth/logout', { refreshToken });
+      }
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
@@ -53,24 +63,19 @@ export function useAuth() {
   }, [clearAuth, router]);
 
   const register = useCallback(
-    async (userData: {
-      email: string;
-      password: string;
-      firstName?: string;
-      lastName?: string;
-    }) => {
+    async (userData: RegisterCredentials) => {
       try {
-        const response = await apiClient.post<LoginResponse>('/auth/register', userData);
-        const { user, accessToken, refreshToken } = response.data;
+        // Call the register endpoint - it returns a success message
+        await apiClient.post('/auth/register', userData);
         
-        setAuth(user, accessToken, refreshToken);
-        router.push('/onboarding');
-      } catch (error) {
+        // After successful registration, automatically log in
+        await login({ email: userData.email, password: userData.password });
+      } catch (error: unknown) {
         console.error('Registration failed:', error);
         throw error;
       }
     },
-    [setAuth, router]
+    [login]
   );
 
   return {

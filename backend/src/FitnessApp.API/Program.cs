@@ -11,6 +11,7 @@ using FitnessApp.API.Configuration;
 using FitnessApp.API.Middleware;
 using FitnessApp.Infrastructure;
 using FitnessApp.Infrastructure.Persistence;
+using FitnessApp.Application.Common.Models;
 
 // Configure Serilog
 Log.Logger = new LoggerConfiguration()

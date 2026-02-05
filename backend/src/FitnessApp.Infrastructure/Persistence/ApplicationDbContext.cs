@@ -140,6 +140,21 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<PlanAdaptation> PlanAdaptations => Set<PlanAdaptation>();
 
     /// <summary>
+    /// Refresh tokens in the application
+    /// </summary>
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
+    /// <summary>
+    /// Email verification tokens in the application
+    /// </summary>
+    public DbSet<EmailVerificationToken> EmailVerificationTokens => Set<EmailVerificationToken>();
+
+    /// <summary>
+    /// Password reset tokens in the application
+    /// </summary>
+    public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
+
+    /// <summary>
     /// Configures the model and relationships
     /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -152,6 +167,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Email).IsRequired().HasMaxLength(256);
             entity.Property(e => e.Name).IsRequired().HasMaxLength(256);
+            entity.Property(e => e.EmailVerified).IsRequired().HasDefaultValue(false);
+            entity.Property(e => e.IsActive).IsRequired().HasDefaultValue(true);
             entity.HasIndex(e => e.Email).IsUnique();
         });
 
@@ -578,6 +595,62 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
             entity.HasIndex(e => e.PlanId);
             entity.HasIndex(e => new { e.PlanId, e.AppliedAt });
+        });
+
+        // Configure RefreshToken entity
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.Token).IsRequired().HasMaxLength(256);
+            entity.Property(e => e.ExpiresAt).IsRequired();
+            entity.Property(e => e.IsRevoked).IsRequired().HasDefaultValue(false);
+            entity.Property(e => e.RevokeReason).HasMaxLength(200);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.Token).IsUnique();
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => new { e.UserId, e.IsRevoked });
+        });
+
+        // Configure EmailVerificationToken entity
+        modelBuilder.Entity<EmailVerificationToken>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.Token).IsRequired().HasMaxLength(256);
+            entity.Property(e => e.ExpiresAt).IsRequired();
+            entity.Property(e => e.IsUsed).IsRequired().HasDefaultValue(false);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.Token).IsUnique();
+            entity.HasIndex(e => e.UserId);
+        });
+
+        // Configure PasswordResetToken entity
+        modelBuilder.Entity<PasswordResetToken>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.UserId).IsRequired();
+            entity.Property(e => e.Token).IsRequired().HasMaxLength(256);
+            entity.Property(e => e.ExpiresAt).IsRequired();
+            entity.Property(e => e.IsUsed).IsRequired().HasDefaultValue(false);
+
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => e.Token).IsUnique();
+            entity.HasIndex(e => e.UserId);
         });
     }
 

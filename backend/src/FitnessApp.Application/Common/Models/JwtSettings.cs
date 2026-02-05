@@ -1,4 +1,4 @@
-namespace FitnessApp.API.Configuration;
+namespace FitnessApp.Application.Common.Models;
 
 /// <summary>
 /// JWT authentication settings
@@ -23,5 +23,5 @@ public class JwtSettings
     /// <summary>
     /// Token expiration time in minutes
     /// </summary>
-    public int ExpirationInMinutes { get; set; } = 60;
+    public int ExpirationInMinutes { get; set; } = 30;
 }

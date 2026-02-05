@@ -5,6 +5,7 @@ using FitnessApp.Application.Common.Interfaces;
 using FitnessApp.Infrastructure.Persistence;
 using FitnessApp.Infrastructure.Repositories;
 using FitnessApp.Infrastructure.AI;
+using FitnessApp.Infrastructure.Services;
 
 namespace FitnessApp.Infrastructure;
 
@@ -62,6 +63,9 @@ public static class DependencyInjection
         services.AddScoped<ITrainingPlanGenerationService, Application.Services.TrainingPlanGenerationService>();
         services.AddScoped<IProgressTrackingService, Application.Services.ProgressTrackingService>();
         services.AddScoped<IPlanAdaptationService, Application.Services.PlanAdaptationService>();
+        services.AddScoped<IAuthenticationService, Application.Services.AuthenticationService>();
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }
