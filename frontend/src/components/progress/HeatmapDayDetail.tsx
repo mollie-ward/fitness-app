@@ -26,7 +26,7 @@ export const HeatmapDayDetail: React.FC<HeatmapDayDetailProps> = ({
 
   return (
     <Modal
-      isOpen={isOpen}
+      open={isOpen}
       onClose={onClose}
       title={formatDateForDisplay(date)}
       size="md"
