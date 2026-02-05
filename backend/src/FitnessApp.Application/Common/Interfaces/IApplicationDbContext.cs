@@ -39,6 +39,26 @@ public interface IApplicationDbContext
     DbSet<Exercise> Exercises { get; }
 
     /// <summary>
+    /// Exercise progressions in the application
+    /// </summary>
+    DbSet<ExerciseProgression> ExerciseProgressions { get; }
+
+    /// <summary>
+    /// Exercise movement patterns in the application
+    /// </summary>
+    DbSet<ExerciseMovementPattern> ExerciseMovementPatterns { get; }
+
+    /// <summary>
+    /// Exercise contraindications in the application
+    /// </summary>
+    DbSet<ExerciseContraindication> ExerciseContraindications { get; }
+
+    /// <summary>
+    /// Contraindications in the application
+    /// </summary>
+    DbSet<Contraindication> Contraindications { get; }
+
+    /// <summary>
     /// Training plans in the application
     /// </summary>
     DbSet<TrainingPlan> TrainingPlans { get; }

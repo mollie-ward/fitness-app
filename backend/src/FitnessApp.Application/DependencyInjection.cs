@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IProgressTrackingService, ProgressTrackingService>();
         services.AddScoped<IAICoachService, AICoachService>();
         services.AddScoped<IPlanAdaptationService, PlanAdaptationService>();
+        services.AddScoped<IInjuryManagementService, InjuryManagementService>();
 
         return services;
     }
