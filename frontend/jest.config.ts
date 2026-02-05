@@ -14,6 +14,9 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-markdown|remark-gfm|micromark|decode-named-character-reference|character-entities|unist-.*|unified|bail|is-plain-obj|trough|vfile|vfile-message|mdast-.*)/)',
+  ],
   collectCoverageFrom: [
     'src/lib/**/*.{js,jsx,ts,tsx}',
     'src/hooks/**/*.{js,jsx,ts,tsx}',
@@ -21,10 +24,13 @@ const config: Config = {
     'src/components/ui/**/*.{js,jsx,ts,tsx}',
     'src/components/calendar/**/*.{js,jsx,ts,tsx}',
     'src/components/progress/**/*.{js,jsx,ts,tsx}',
+    'src/components/coach/**/*.{js,jsx,ts,tsx}',
+    'src/services/**/*.{js,jsx,ts,tsx}',
     '!src/lib/api/**',
     '!src/**/*.d.ts',
     '!src/**/*.stories.{js,jsx,ts,tsx}',
     '!src/**/__tests__/**',
+    '!src/**/index.{js,jsx,ts,tsx}',
   ],
   coverageThreshold: {
     global: {
@@ -46,6 +52,18 @@ const config: Config = {
       statements: 85,
     },
     'src/components/progress/**/*.{js,jsx,ts,tsx}': {
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+    'src/components/coach/**/*.{js,jsx,ts,tsx}': {
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+    'src/services/**/*.{js,jsx,ts,tsx}': {
       branches: 85,
       functions: 85,
       lines: 85,
